@@ -1,0 +1,19 @@
+{
+    "manifest_version": 3,
+    "name": "Xpath Generator",
+    "description":"This is automatic Xpath Generator",
+    "version":"1.0",
+    "action": {
+      "default_icon": "icon.PNG",
+      "default_title": "Click on any element to get the xPath"
+    },
+    "content_scripts": [
+        {
+          "matches": ["https://*/*","https://*/*"],
+          "js": ["xpath.js"]
+        }
+      ],
+      "permissions": [
+        "storage"
+      ]
+}
