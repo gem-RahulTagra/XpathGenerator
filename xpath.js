@@ -1,13 +1,5 @@
-var num=1;
-var logs="";
+var logs=[];
 
-// function getLogs(){
-//     for(let i=1;i<=num;i++){
-//         chrome.storage.sync.get([i]).then((result) => {
-//             alert(result.key);
-//           });
-//     }
-// }
 
 document.onmouseover = function(event) {
     if (event===undefined) event= window.event;        
@@ -43,19 +35,23 @@ document.onclick= function(event) {
     console.log(target);
     var path= getPathTo(target);
     var txy= getPageXY(target);
-    var message = 'You clicked the element '+path;
-    logs=logs+"\n"+message;
+    var message = 'You clicked the element '+ path;
 
-    chrome.storage.sync.set({ "Logs" : logs }, function(){
-       console.log("Logs Saved");
-      });
+    logs.push(message);
+     for(let i=0;i<logs.length;i++){
+        console.log(logs[i]);
+     }
 
-      chrome.storage.sync.get("Logs",function(log){
-        console.log(log);
-      });
-      
-    // +' at offset '+(mxy[0]-txy[0])+', '+(mxy[1]-txy[1]);
-//    alert(message);
+     var askRecord = confirm("Do you want to record further?");
+
+     if(askRecord === false){
+        let name = prompt("Enter projectName");
+        let desc = prompt("Enter Project Description");
+
+        postData(name,desc);
+
+        
+     }      
 }
 
 function getPathTo(element) {
@@ -145,4 +141,24 @@ function getPageXY(element) {
         element= element.offsetParent;
     }
     return [x, y];
+}
+
+function postData(project,Desc){
+    
+    fetch('http://localhost:5000/steps', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            projectName : project,
+            description : Desc,
+            steps : logs
+        })
+    })
+    .then(response => response.json())
+    .then(data => console.log("Data Successfully Posted"))
+    .catch(error => console.error(error));
+
+
 }
