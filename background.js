@@ -31,7 +31,7 @@ function getProjectDetails(runState) {
             chrome.scripting.executeScript({
                 target: {
                     tabId: activeTabId,
-                    allFrames: true
+                    // allFrames: true
                 },
                 func: postData,
             })
@@ -50,7 +50,7 @@ function getProjectDetails(runState) {
             chrome.scripting.executeScript({
                 target: {
                     tabId: activeTabId,
-                    allFrames: true
+                    // allFrames: true
                 },
                 func: startPrompt
             })
@@ -90,7 +90,7 @@ function startContentScripts(runState) {
             chrome.scripting.executeScript({
                 target: {
                     tabId: activeTabId,
-                    allFrames: true
+                    // allFrames: true
                 },
                 func: stopPrompt
             })
