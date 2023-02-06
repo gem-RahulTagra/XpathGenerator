@@ -131,7 +131,7 @@ function postData() {
             body: JSON.stringify(
                 {
                     projectName: project,
-                    description: pr2,
+                    description: projectDesc,
                     steps: data.Logs
                 }
             )
