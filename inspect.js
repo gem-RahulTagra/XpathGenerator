@@ -1,4 +1,6 @@
 var logs = [];
+var keyEnter = [];
+var stringEntered = [];
 
 document.onmouseover = function (event) {
     if (event === undefined) event = window.event;
@@ -22,18 +24,59 @@ document.onmouseover = function (event) {
 
 }
 
+function getScrollOffsets() {
+    var x = window.scrollX || window.pageXOffset;
+    var y = window.scrollY || window.pageYOffset;
+    console.log('x: ' + x + ', y: ' + y);
+}
+
+// window.addEventListener('scroll', getScrollOffsets);
+
+document.onkeydown = function (event) {
+    if (event === undefined) event = window.event;
+    var target = 'target' in event ? event.target : event.srcElement;
+
+    let same = -10;
+
+    if (event.key !== "Shift") {
+
+        if (keyEnter.length === 0) {
+            keyEnter.push(getPathTo(target));
+            stringEntered.push(new Array(event.key));
+        }
+
+        else {
+            for (let i = 0; i < keyEnter.length; i++) {
+                if (keyEnter[i] === getPathTo(target)) {
+                    stringEntered[i] = stringEntered[i] + event.key;
+                    same = i;
+                    break;
+                }
+            }
+            if (same === -10) {
+                keyEnter.push(getPathTo(target));
+                stringEntered.push(event.key);
+            }
+        }
+
+        console.log(keyEnter);
+        console.log(stringEntered);
+    }
+
+}
+
 document.onclick = function (event) {
     if (event === undefined) event = window.event;
     var target = 'target' in event ? event.target : event.srcElement;
 
     event.preventDefault();
+    event.stopPropagation();
 
     var root = document.compatMode === 'CSS1Compat' ? document.documentElement : document.body;
     var mxy = [event.clientX + root.scrollLeft, event.clientY + root.scrollTop];
 
-    console.log(target);
+    // console.log(target);
     var path = getPathTo(target);
-    var txy = getPageXY(target);
     var message = 'You clicked the element ' + path;
     logs.push(message);
 
@@ -129,12 +172,12 @@ function getPathTo(element) {
 
 }
 
-function getPageXY(element) {
-    var x = 0, y = 0;
-    while (element) {
-        x += element.offsetLeft;
-        y += element.offsetTop;
-        element = element.offsetParent;
-    }
-    return [x, y];
-}
+// function getPageXY(element) {
+//     var x = 0, y = 0;
+//     while (element) {
+//         x += element.offsetLeft;
+//         y += element.offsetTop;
+//         element = element.offsetParent;
+//     }
+//     return [x, y];
+// }
