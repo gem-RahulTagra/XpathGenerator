@@ -1,28 +1,26 @@
 var logs = [];
-var keyEnter = [];
-var stringEntered = [];
 
-document.onmouseover = function (event) {
-    if (event === undefined) event = window.event;
-    var target = 'target' in event ? event.target : event.srcElement;
+// document.onmouseover = function (event) {
+//     if (event === undefined) event = window.event;
+//     var target = 'target' in event ? event.target : event.srcElement;
 
-    var bgColor = target.style.backgroundColor;
-    var BGcolor = target.parentNode.style.backgroundColor;
+//     var bgColor = target.style.backgroundColor;
+//     var BGcolor = target.parentNode.style.backgroundColor;
 
-    target.style.backgroundColor = "yellow";
-    target.parentNode.style.backgroundColor = "red";
-    target.style.cursor = "crosshair";
+//     target.style.backgroundColor = "yellow";
+//     target.parentNode.style.backgroundColor = "red";
+//     target.style.cursor = "crosshair";
 
 
-    document.onmouseout = function (event) {
-        if (event === undefined) event = window.event;
-        var target = 'target' in event ? event.target : event.srcElement;
+//     document.onmouseout = function (event) {
+//         if (event === undefined) event = window.event;
+//         var target = 'target' in event ? event.target : event.srcElement;
 
-        target.style.backgroundColor = bgColor;
-        target.parentNode.style.backgroundColor = BGcolor;
-    }
+//         target.style.backgroundColor = bgColor;
+//         target.parentNode.style.backgroundColor = BGcolor;
+//     }
 
-}
+// }
 
 function getScrollOffsets() {
     var x = window.scrollX || window.pageXOffset;
@@ -32,38 +30,6 @@ function getScrollOffsets() {
 
 // window.addEventListener('scroll', getScrollOffsets);
 
-document.onkeydown = function (event) {
-    if (event === undefined) event = window.event;
-    var target = 'target' in event ? event.target : event.srcElement;
-
-    let same = -10;
-
-    if (event.key !== "Shift") {
-
-        if (keyEnter.length === 0) {
-            keyEnter.push(getPathTo(target));
-            stringEntered.push(new Array(event.key));
-        }
-
-        else {
-            for (let i = 0; i < keyEnter.length; i++) {
-                if (keyEnter[i] === getPathTo(target)) {
-                    stringEntered[i] = stringEntered[i] + event.key;
-                    same = i;
-                    break;
-                }
-            }
-            if (same === -10) {
-                keyEnter.push(getPathTo(target));
-                stringEntered.push(event.key);
-            }
-        }
-
-        console.log(keyEnter);
-        console.log(stringEntered);
-    }
-
-}
 
 document.onclick = function (event) {
     if (event === undefined) event = window.event;
@@ -78,7 +44,18 @@ document.onclick = function (event) {
     // console.log(target);
     var path = getPathTo(target);
     var message = 'You clicked the element ' + path;
-    logs.push(message);
+
+    if (target.tagName.toLowerCase().includes('input')) {
+        var text = prompt("Enter the data you want to type.");
+        if(text === null){
+            text = "";
+        }
+        message = 'Enter : ' + text + ' at the element ' + path;
+        logs.push(message);
+    }
+    else {
+        logs.push(message);
+    }
 
     for (let i = 0; i < logs.length; i++) {
         console.log(logs[i]);
